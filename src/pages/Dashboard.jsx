@@ -1,47 +1,201 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getAllQuestionsByUser } from "../service/api";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  APP_BASE_URL,
+  getAllQuestionsByUser,
+  getAllResponseByViewer,
+} from "../service/api";
+import Questions from "../components/Questions";
+import { Avatar, IconButton } from "@mui/material";
+import Responses from "../components/Responses";
+import Snackbar from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import CancelIcon from "@mui/icons-material/Cancel";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const [open, setOpen] = useState(false);
+  const [styles, setStyles] = useState({
+    top: 100,
+    fontSize: 50,
+    topText: -10,
+  });
   const [questionList, setQuestionList] = useState();
+  const [selectedQuestion, setSelectedQuestion] = useState();
+  const [responseList, setResponseList] = useState();
+  const [selectedPopup, setSelectedPopup] = useState();
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  useEffect(() => {
-    if (location.state === null) {
-      navigate("/");
-      return;
-    }
+  const handleOpen = (selected) => {
+    setSelectedPopup(selected);
+    setStyles({ top: 10, fontSize: 25, topText: -35 });
+  };
+
+  const handleClose = () => {
+    setStyles({
+      top: 100,
+      fontSize: 50,
+      topText: -10,
+    });
+    setSelectedPopup(-1);
+  };
+
+  const handleGetAllQuestionsByUser = () => {
     getAllQuestionsByUser({
       userId: location.state.userId,
       pin: location.state.pin,
     })
       .then((response) => setQuestionList(response.data))
       .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    if (location.state === null) {
+      navigate("/");
+      return;
+    }
+    handleGetAllQuestionsByUser();
   }, []);
 
-  const handleQuestionClick = (questionId) => {
-    navigate("/responses", {
-      state: { questionId, userId: location.state.userId },
-    });
+  const handleQuestionClick = (question) => {
+    setSelectedQuestion(question.question);
+    getAllResponseByViewer({
+      userId: location.state.userId,
+      questionId: question.questionId,
+    })
+      .then((response) => {
+        setResponseList(response.data);
+        handleOpen(1);
+      })
+      .catch((error) => console.log(error));
   };
+
+  const handleCopyQuestionLink = (questionId) => {
+    const link = `${APP_BASE_URL}${location.state.userId}/${questionId}`;
+    navigator.clipboard.writeText(link);
+    setSnackbarMessage("Copied the link: " + link);
+    setOpen(true);
+  };
+
+  const handleLogout = () => {
+    navigate("/");
+  };
+
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={() => setOpen(false)}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
 
   return (
     <div>
-      <h1>Your all questions</h1>
-      {location.state !== null && <h4>Welcome {location.state.username}</h4>}
-      <p>Questions</p>
-      <ul>
-        {questionList &&
-          questionList.map((question, key) => (
-            <li key={key}>
-              <span onClick={() => handleQuestionClick(question.questionId)}>
-                {question.question}
-              </span>
-            </li>
-          ))}
-      </ul>
+      <div className="dashboard-container p-4">
+        <div className="d-flex justify-content-between">
+          <h1>erehhh</h1>
+          <Avatar onClick={() => handleOpen(3)} />
+        </div>
+        {location.state !== null && <h4>Welcome {location.state.username}</h4>}
+        {location.state !== null && (
+          <p className="d-flex- justify-content-center">
+            <b className="font-weight-bold ">pin: ****</b>
+            <VisibilityIcon className="mx-2" onClick={() => handleOpen(2)} />
+            {`Remember this while logging in.`}
+          </p>
+        )}
+        {questionList && questionList.length === 0 ? (
+          <b>no questions asked</b>
+        ) : (
+          <b>already asked questions</b>
+        )}
+        <div
+          className="mt-4"
+          style={{
+            maxHeight: window.innerHeight - 300,
+            overflowY: "auto",
+          }}
+        >
+          {questionList &&
+            questionList.map((question, key) => (
+              <div
+                className="list mb-2 px-4 p-1 pb-3 d-flex align-items-center justify-content-between"
+                key={key}
+              >
+                <span onClick={() => handleQuestionClick(question)}>
+                  {question.question}
+                </span>
+                <span
+                  onClick={() => handleCopyQuestionLink(question.questionId)}
+                >
+                  <ContentCopyIcon />
+                </span>
+              </div>
+            ))}
+        </div>
+        <button className="btni mt-4 p-3 w-100" onClick={() => handleOpen(0)}>
+          ask a question
+        </button>
+      </div>
+      <div
+        className="dashboard-form-container p-4"
+        style={{ top: `${styles.top}%` }}
+      >
+        <CancelIcon
+          fontSize="large"
+          style={{ position: "absolute", top: 30, right: 30 }}
+          onClick={handleClose}
+        />
+        <div className="mt-2">
+          {selectedPopup === 0 && (
+            <Questions
+              userId={location.state.userId}
+              handleGetAllQuestionsByUser={handleGetAllQuestionsByUser}
+            />
+          )}
+          {selectedPopup === 1 && (
+            <Responses
+              responseList={responseList}
+              question={selectedQuestion}
+            />
+          )}
+          {selectedPopup === 2 && (
+            <div className="d-flex flex-column align-items-center p-5">
+              <h2>{location.state.pin}</h2>
+              <b>
+                Do not share it with anyone and always remember this as you'll
+                be needing your username and pin for login.
+              </b>
+            </div>
+          )}
+          {selectedPopup === 3 && (
+            <div className="d-flex flex-column align-items-center p-5">
+              <button
+                style={{ background: "rgb(255,0,0,0.7)" }}
+                className="btni p-3 w-50"
+                onClick={handleLogout}
+              >
+                <b>logout???</b>
+              </button>
+            </div>
+          )}
+        </div>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={() => setOpen(false)}
+          message={snackbarMessage}
+          action={action}
+        />
+      </div>
     </div>
   );
 };

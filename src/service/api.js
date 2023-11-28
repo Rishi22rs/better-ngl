@@ -1,6 +1,9 @@
 import axios from "axios";
 
-export const API = `http://localhost:6699/`;
+// export const API = `http://localhost:6699/`;
+export const API = `https://ngl-2.cyclic.app/`;
+export const APP_BASE_URL = "https://ngl2.netlify.app/";
+// export const APP_BASE_URL = "http://localhost:3000/";
 
 export const generatingPinForUser = (payload) => {
   return axios.post(`${API}api/generatingPinForUser`, payload);
