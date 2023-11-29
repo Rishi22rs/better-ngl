@@ -32,3 +32,7 @@ export const getQuestionByQuestionId = (payload) => {
 export const getAllResponseByViewer = (payload) => {
   return axios.post(`${API}api/getAllResponseByViewer`, payload);
 };
+
+export const checkUserNameExists = (payload) => {
+  return axios.post(`${API}api/checkUserNameExists`, payload);
+};

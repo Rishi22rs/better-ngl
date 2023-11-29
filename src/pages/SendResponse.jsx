@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getQuestionByQuestionId, saveViewerResponse } from "../service/api";
+import {
+  APP_BASE_URL,
+  getQuestionByQuestionId,
+  saveViewerResponse,
+} from "../service/api";
 import { Snackbar, TextField, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -8,6 +12,8 @@ const SendResponse = () => {
   const [userResponse, setUserResponse] = useState("");
   const [question, setQuestion] = useState();
   const [open, setOpen] = useState(false);
+  const [responseReplyURL, setResponseReplyURL] = useState();
+
   const { userId, questionId } = useParams();
 
   useEffect(() => {
@@ -27,8 +33,15 @@ const SendResponse = () => {
         .then((response) => {
           setUserResponse("");
           setOpen(true);
+          setResponseReplyURL(
+            createGetResponseReplyURL(response.data.responseId)
+          );
         })
         .catch((error) => console.log(error));
+  };
+
+  const createGetResponseReplyURL = (responseId) => {
+    return `${APP_BASE_URL}${responseId}/${questionId}`;
   };
 
   const action = (
@@ -45,10 +58,12 @@ const SendResponse = () => {
   );
 
   return (
-    <div className="p-3">
-      <h1>send Response</h1>
+    <div className="p-3 dashboard-container">
+      <h1>send response</h1>
+      <p>its completely anonymous...🕵️🕵️🕵️</p>
       <div className="w-100">
-        <form onSubmit={onSubmitResponse} className="d-flex flex-column mt-5">
+        <b className="mx-2">❓ {question}</b>
+        <form onSubmit={onSubmitResponse} className="d-flex flex-column mt-4">
           <TextField
             id="response"
             label="response"
@@ -62,6 +77,14 @@ const SendResponse = () => {
             submit
           </button>
         </form>
+        <div className="mt-4">
+          {responseReplyURL && (
+            <div>
+              <b>you can see the reply to your response here on this URL...</b>
+              <p>{responseReplyURL}</p>
+            </div>
+          )}
+        </div>
       </div>
       <Snackbar
         open={open}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  checkUserNameExists,
   generatingPinForUser,
   getAllQuestionsByUser,
   gettingUserBasedOnPin,
@@ -10,6 +11,7 @@ import TextField from "@mui/material/TextField";
 const Home = () => {
   const [username, setUsername] = useState("");
   const [loginDetails, setLoginDetails] = useState({});
+  const [usernameExists, setUsernameExists] = useState(false);
   const [styles, setStyles] = useState({
     top: 100,
     fontSize: 50,
@@ -32,18 +34,23 @@ const Home = () => {
 
   const onSubmitUserName = (event) => {
     event.preventDefault();
-    username !== "" &&
-      generatingPinForUser({ username })
-        .then((response) =>
-          navigate("/dashboard", {
-            state: {
-              pin: response.data.pin,
-              userId: response.data.userId,
-              username: response.data.username,
-            },
-          })
-        )
-        .catch((error) => console.log(error));
+    if (username !== "") {
+      checkUserNameExists({ username }).then((response) => {
+        setUsernameExists(response.data.exists);
+        !response.data.exists &&
+          generatingPinForUser({ username })
+            .then((res) =>
+              navigate("/dashboard", {
+                state: {
+                  pin: res.data.pin,
+                  userId: res.data.userId,
+                  username: res.data.username,
+                },
+              })
+            )
+            .catch((error) => console.log(error));
+      });
+    }
   };
 
   const handleLogin = (event) => {
@@ -100,13 +107,19 @@ const Home = () => {
                 new user??? claim your user name and get started...
               </p>
               <div style={{ display: "flex" }}>
-                <TextField
-                  required
-                  id="outlined-required"
-                  label="username"
-                  className="mb-4"
-                  onChange={handleUserInput}
-                />
+                <div className="mb-2">
+                  <TextField
+                    required
+                    id="outlined-required"
+                    label="username"
+                    onChange={handleUserInput}
+                  />
+                  {usernameExists && (
+                    <p className="text-danger">
+                      username already in use!!!🥲🥲🥲
+                    </p>
+                  )}
+                </div>
               </div>
               <button className="btni p-3 w-50" type="submit">
                 letss goo

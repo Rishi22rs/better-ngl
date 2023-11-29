@@ -29,6 +29,14 @@ const Dashboard = () => {
   const [selectedPopup, setSelectedPopup] = useState();
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  useEffect(() => {
+    if (location.state === null) {
+      navigate("/");
+      return;
+    }
+    handleGetAllQuestionsByUser();
+  }, []);
+
   const handleOpen = (selected) => {
     setSelectedPopup(selected);
     setStyles({ top: 10, fontSize: 25, topText: -35 });
@@ -51,14 +59,6 @@ const Dashboard = () => {
       .then((response) => setQuestionList(response.data))
       .catch((error) => console.log(error));
   };
-
-  useEffect(() => {
-    if (location.state === null) {
-      navigate("/");
-      return;
-    }
-    handleGetAllQuestionsByUser();
-  }, []);
 
   const handleQuestionClick = (question) => {
     setSelectedQuestion(question.question);
