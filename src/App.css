@@ -11,7 +11,7 @@
 }
 .btni {
   position: relative;
-  background-color: #eff774;
+  background-color: rgb(238, 247, 115, 0.7);
   border-radius: 30px;
   border: none;
   outline: none;
@@ -23,7 +23,7 @@
   justify-content: center;
   color: white;
   position: absolute;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("./graphics/bg.jpg");
   top: 0;
   bottom: 0;
@@ -87,13 +87,22 @@ input {
 /* ///////////////dashboard/////////// */
 
 .dashboard-container {
-  background-color: rgba(0, 0, 0, 0.1);
+  /* background-color: rgba(0, 0, 0, 0.1); */
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   max-width: 600px;
+  background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0.7)
+    ),
+    url("./graphics/bg.jpg");
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
 }
 
 .dashboard-form-container {

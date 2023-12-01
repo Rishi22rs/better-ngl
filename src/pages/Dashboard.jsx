@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   APP_BASE_URL,
@@ -13,6 +13,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ShareIcon from "@mui/icons-material/Share";
+import HowToShare from "../components/HowToShare";
+import ShareStyles from "../components/ShareStyles";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -104,7 +107,8 @@ const Dashboard = () => {
           <h1>erehhh</h1>
           <Avatar onClick={() => handleOpen(3)} />
         </div>
-        {location.state !== null && <h4>Welcome {location.state.username}</h4>}
+        <hr />
+        {location.state !== null && <h4>welcome {location.state.username}</h4>}
         {location.state !== null && (
           <p className="d-flex- justify-content-center">
             <b className="font-weight-bold ">pin: ****</b>
@@ -113,9 +117,9 @@ const Dashboard = () => {
           </p>
         )}
         {questionList && questionList.length === 0 ? (
-          <b>no questions asked</b>
+          <b>no QnA asked</b>
         ) : (
-          <b>already asked questions</b>
+          <b>already asked QnA</b>
         )}
         <div
           className="mt-4"
@@ -133,16 +137,33 @@ const Dashboard = () => {
                 <span onClick={() => handleQuestionClick(question)}>
                   {question.question}
                 </span>
-                <span
-                  onClick={() => handleCopyQuestionLink(question.questionId)}
-                >
-                  <ContentCopyIcon />
-                </span>
+                <div>
+                  <span
+                    onClick={() => {
+                      setSelectedQuestion(question);
+                      handleOpen(5);
+                    }}
+                  >
+                    <ShareIcon />
+                  </span>
+                  <span
+                    onClick={() => handleCopyQuestionLink(question.questionId)}
+                  >
+                    <ContentCopyIcon />
+                  </span>
+                </div>
               </div>
             ))}
         </div>
         <button className="btni mt-4 p-3 w-100" onClick={() => handleOpen(0)}>
-          ask a question
+          ask a QnA
+        </button>
+        <button
+          className="btni mt-4 p-3 w-100"
+          style={{ background: "rgb(0,105,218,0.7)" }}
+          onClick={() => handleOpen(4)}
+        >
+          how to share QnA
         </button>
       </div>
       <div
@@ -186,6 +207,14 @@ const Dashboard = () => {
                 <b>logout???</b>
               </button>
             </div>
+          )}
+          {selectedPopup === 4 && <HowToShare />}
+          {selectedPopup === 5 && (
+            <ShareStyles
+              questionId={selectedQuestion.questionId}
+              question={selectedQuestion.question}
+              userId={location.state.userId}
+            />
           )}
         </div>
         <Snackbar
