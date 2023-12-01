@@ -28,6 +28,7 @@ const ShareStyles = ({ userId, questionId, question }) => {
   };
 
   const handleShare = async () => {
+    handleCopyQuestionLink();
     const newFile = await toBlob(questionsRef.current);
     const data = {
       files: [
@@ -95,7 +96,7 @@ const ShareStyles = ({ userId, questionId, question }) => {
           <div
             ref={questionsRef}
             className="d-flex flex-column align-items-center p-4"
-            style={{ background: themeColor.background, borderRadius: 15 }}
+            style={{ background: themeColor.background }}
           >
             <h3 style={{ color: themeColor.text }}>{question}</h3>
             <div
