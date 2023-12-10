@@ -8,6 +8,11 @@ import { APP_BASE_URL } from "../service/api";
 const ShareStyles = ({ userId, questionId, question }) => {
   const [open, setOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [bgImg, setBgImg] = useState();
+
+  const fileRef = useRef();
+
+  const link = `${APP_BASE_URL}${userId}/${questionId}`;
 
   const [themeColor, setThemeColor] = useState({
     background: "#FFCCC3",
@@ -20,8 +25,12 @@ const ShareStyles = ({ userId, questionId, question }) => {
     setThemeColor({ ...themeColor, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    console.log(e.target.files[0]);
+    setBgImg(URL.createObjectURL(e.target.files[0]));
+  };
+
   const handleCopyQuestionLink = () => {
-    const link = `${APP_BASE_URL}${userId}/${questionId}`;
     navigator.clipboard.writeText(link);
     setSnackbarMessage("copied link: " + link);
     setOpen(true);
@@ -32,12 +41,12 @@ const ShareStyles = ({ userId, questionId, question }) => {
     const newFile = await toBlob(questionsRef.current);
     const data = {
       files: [
-        new File([newFile], "ngl2.png", {
+        new File([newFile], "anonify.png", {
           type: newFile.type,
         }),
       ],
-      title: "ngl2",
-      text: "ngl2",
+      title: "anonify",
+      text: link,
     };
 
     try {
@@ -91,28 +100,60 @@ const ShareStyles = ({ userId, questionId, question }) => {
               name="text"
             />
           </div>
+          <div className="mx-2">
+            <p>
+              upload a <b>background pic</b>
+            </p>
+            <input
+              type="file"
+              className="w-100 btn"
+              onChange={handleFileChange}
+              name="text"
+              style={{ display: "none" }}
+              ref={fileRef}
+              accept="image/*"
+            />
+            {!bgImg ? (
+              <button
+                className="btni w-100"
+                style={{ background: "rgb(0,0,255,0.2)", color: "white" }}
+                onClick={() => fileRef.current.click()}
+              >
+                upload
+              </button>
+            ) : (
+              <button
+                className="btni w-100"
+                style={{ background: "rgb(255,0,0,0.7)", color: "white" }}
+                onClick={() => setBgImg(undefined)}
+              >
+                remove background
+              </button>
+            )}
+          </div>
         </div>
         <div className="mt-5">
           <div
             ref={questionsRef}
             className="d-flex flex-column align-items-center p-4"
-            style={{ background: themeColor.background }}
+            style={
+              bgImg
+                ? {
+                    backgroundImage: `url(${bgImg})`,
+                    backgroundSize: "100% 100%",
+                  }
+                : { background: themeColor.background }
+            }
           >
             <h3 style={{ color: themeColor.text }}>{question}</h3>
-            <div
-              className="rounded px-2 mt-3"
-              style={{
-                border: "2px dotted #7990AE",
-                background: "white",
-              }}
-            >
+            <div className="rounded px-4 mt-3">
               <p
                 className="d-flex flex-row align-items-center"
                 style={{ color: "#7990AE" }}
               >
-                add your{" "}
+                add{" "}
                 <span
-                  className="p-1 d-flex align-items-center m-2 rounded"
+                  className="d-flex m-2 rounded"
                   style={{ border: "2px solid #7990AE" }}
                 >
                   <InsertLinkIcon style={{ transform: "rotate(-45deg)" }} />
@@ -125,7 +166,7 @@ const ShareStyles = ({ userId, questionId, question }) => {
         </div>
       </div>
       <button
-        className="btni mt-4 p-3 w-100"
+        className="btni mt-4 p-3 w-100 h-100"
         style={{ background: "rgb(0,105,218,0.7)", color: "white" }}
         onClick={handleShare}
       >

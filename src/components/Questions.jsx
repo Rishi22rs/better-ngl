@@ -56,6 +56,7 @@ const Questions = ({ userId, handleGetAllQuestionsByUser }) => {
             maxRows={4}
             onChange={handleUserInput}
             required
+            inputProps={{ maxLength: 40 }}
           />
           <button className="btni p-2 mt-3" type="submit">
             Submit
