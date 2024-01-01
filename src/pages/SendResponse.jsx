@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   APP_BASE_URL,
   getQuestionByQuestionId,
@@ -13,6 +13,8 @@ const SendResponse = () => {
   const [question, setQuestion] = useState();
   const [open, setOpen] = useState(false);
   const [responseReplyURL, setResponseReplyURL] = useState();
+
+  const navigate = useNavigate();
 
   const { userId, questionId } = useParams();
 
@@ -76,15 +78,22 @@ const SendResponse = () => {
           <button className="btni p-2 mt-3" type="submit">
             submit
           </button>
+          <button
+            className="btni p-2 mt-3"
+            style={{ background: "rgb(0,0,255,0.7)", color: "white" }}
+            onClick={() => navigate("/")}
+          >
+            get your own anonify link
+          </button>
         </form>
-        <div className="mt-4">
+        {/* <div className="mt-4">
           {responseReplyURL && (
             <div>
               <b>you can see the reply to your response here on this URL...</b>
               <p>{responseReplyURL}</p>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
       <Snackbar
         open={open}

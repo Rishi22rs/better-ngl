@@ -16,7 +16,7 @@ import bg8 from "../graphics/bg8.jpg";
 import bg9 from "../graphics/bg9.jpg";
 import bg10 from "../graphics/bg10.jpg";
 
-const ShareStyles = ({ userId, questionId, question }) => {
+const ShareResponse = ({ userId, questionId, question, selectedResponse }) => {
   const bgProps = [
     {
       bg: bg0,
@@ -145,7 +145,7 @@ const ShareStyles = ({ userId, questionId, question }) => {
   );
   return (
     <div>
-      <h1>preview on your story</h1>
+      <h1>share your response</h1>
       <div
         style={{
           maxHeight: window.innerHeight - 200,
@@ -220,22 +220,17 @@ const ShareStyles = ({ userId, questionId, question }) => {
                     }
               }
             >
-              <h3 style={{ color: themeColor.text }}>{question}</h3>
-              <div className="rounded px-4 mt-3">
-                <p
-                  className="d-flex flex-row align-items-center"
-                  style={{ color: "#7990AE" }}
-                >
-                  add{" "}
-                  <span
-                    className="d-flex m-2 rounded"
-                    style={{ border: "2px solid #7990AE" }}
-                  >
-                    <InsertLinkIcon style={{ transform: "rotate(-45deg)" }} />
-                    link
-                  </span>
-                  here
-                </p>
+              <h3 style={{ color: themeColor.text }}>{selectedResponse}</h3>
+              <div
+                className="rounded px-4 mt-3"
+                style={{
+                  background: "rgb(255,255,255,0.3)",
+                  height: 50,
+                  width: 200,
+                }}
+              >
+                {" "}
+                <b className="d-flex m-2 rounded">your reply here</b>
               </div>
             </div>
           </div>
@@ -285,23 +280,15 @@ const ShareStyles = ({ userId, questionId, question }) => {
               className="d-flex flex-column align-items-center p-4 justify-content-center rounded mb-5"
               style={{ background: "rgb(0,0,0,0.7)" }}
             >
-              <h3 style={{ color: themeColor.text }}>{question}</h3>
-              <div className="rounded px-4 mt-3">
-                <p
-                  className="d-flex flex-row align-items-center"
-                  style={{ color: "#7990AE" }}
-                >
-                  add{" "}
-                  <span
-                    className="d-flex m-2 rounded"
-                    style={{ border: "2px solid #7990AE" }}
-                  >
-                    <InsertLinkIcon style={{ transform: "rotate(-45deg)" }} />
-                    link
-                  </span>
-                  here
-                </p>
-              </div>
+              <h3 style={{ color: themeColor.text }}>{selectedResponse}</h3>
+              <div
+                className="rounded px-4 mt-3"
+                style={{
+                  background: "rgb(255,255,255,0.3)",
+                  height: 100,
+                  width: 200,
+                }}
+              ></div>
             </div>
             <span
               className="mt-5 p-3 rounded"
@@ -322,4 +309,4 @@ const ShareStyles = ({ userId, questionId, question }) => {
   );
 };
 
-export default ShareStyles;
+export default ShareResponse;

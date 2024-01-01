@@ -16,6 +16,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ShareIcon from "@mui/icons-material/Share";
 import HowToShare from "../components/HowToShare";
 import ShareStyles from "../components/ShareStyles";
+import ShareResponse from "../components/ShareResponse";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ const Dashboard = () => {
   const [responseList, setResponseList] = useState();
   const [selectedPopup, setSelectedPopup] = useState();
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [selectedResponse, setSelectedResponse] = useState("");
 
   useEffect(() => {
     if (location.state === null) {
@@ -104,8 +106,13 @@ const Dashboard = () => {
     <div>
       <div className="dashboard-container p-4">
         <div className="d-flex justify-content-between">
-          <h1>erehhh</h1>
-          <Avatar onClick={() => handleOpen(3)} />
+          <h1>anonify</h1>
+          <Avatar
+            sx={{ bgcolor: "rgb(0,105,218,0.7)" }}
+            onClick={() => handleOpen(3)}
+          >
+            {location.state.username[0]}
+          </Avatar>
         </div>
         <hr />
         {location.state !== null && <h4>welcome {location.state.username}</h4>}
@@ -124,7 +131,7 @@ const Dashboard = () => {
         <div
           className="mt-4"
           style={{
-            maxHeight: window.innerHeight - 300,
+            maxHeight: window.innerHeight - 400,
             overflowY: "auto",
           }}
         >
@@ -184,6 +191,8 @@ const Dashboard = () => {
           )}
           {selectedPopup === 1 && (
             <Responses
+              setSelectedResponse={setSelectedResponse}
+              setSelectedPopup={setSelectedPopup}
               responseList={responseList}
               question={selectedQuestion}
             />
@@ -214,6 +223,14 @@ const Dashboard = () => {
               questionId={selectedQuestion.questionId}
               question={selectedQuestion.question}
               userId={location.state.userId}
+            />
+          )}
+          {selectedPopup === 6 && (
+            <ShareResponse
+              questionId={selectedQuestion.questionId}
+              question={selectedQuestion.question}
+              userId={location.state.userId}
+              selectedResponse={selectedResponse}
             />
           )}
         </div>

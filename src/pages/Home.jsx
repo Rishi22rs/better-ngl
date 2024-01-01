@@ -78,7 +78,7 @@ const Home = () => {
             }}
             onClick={() => setStyles({ top: 100, fontSize: 50, topText: -10 })}
           >
-            erehhh
+            anonify
           </h1>
           <br />
           <button
@@ -124,6 +124,13 @@ const Home = () => {
               <button className="btni p-3 w-50" type="submit">
                 letss goo
               </button>
+              <button
+                onClick={() => setPopup(1)}
+                className="btni mt-5 p-2 px-5"
+                style={{ background: "rgb(0,255,0,0.4)" }}
+              >
+                already a user???
+              </button>
             </form>
           )}
           {popup === 1 && (
@@ -155,8 +162,16 @@ const Home = () => {
                   type="password"
                 />
               </div>
+
               <button className="btni p-3 w-50" type="submit">
                 letss goo
+              </button>
+              <button
+                onClick={() => setPopup(0)}
+                className="btni mt-5 p-2 px-5"
+                style={{ background: "rgb(0,255,0,0.4)" }}
+              >
+                new user???
               </button>
             </form>
           )}

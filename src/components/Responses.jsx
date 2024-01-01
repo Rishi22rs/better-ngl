@@ -1,4 +1,11 @@
-const Responses = ({ question, responseList }) => {
+import ShareIcon from "@mui/icons-material/Share";
+
+const Responses = ({
+  question,
+  responseList,
+  setSelectedPopup,
+  setSelectedResponse,
+}) => {
   return (
     <div>
       <h3>{question}</h3>
@@ -18,7 +25,16 @@ const Responses = ({ question, responseList }) => {
               className="mb-2 px-4 p-1 pb-3 d-flex align-items-center justify-content-between"
               key={key}
             >
-              <span>{response.response}</span>
+              <span
+                onClick={() => {
+                  setSelectedResponse(response.response);
+                  setSelectedPopup(6);
+                }}
+                className="d-flex justify-content-between align-items-center w-100"
+              >
+                {response.response}
+                <ShareIcon />
+              </span>
             </div>
           ))
         )}
