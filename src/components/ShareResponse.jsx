@@ -242,10 +242,6 @@ const ShareResponse = ({ userId, questionId, question, selectedResponse }) => {
         >
           share it on your story
         </button>
-        <hr />
-        <button className="btni p-3 w-100" onClick={handleCopyQuestionLink}>
-          tap her to copy link and share your QnA anywhere
-        </button>
         <Snackbar
           open={open}
           autoHideDuration={6000}
