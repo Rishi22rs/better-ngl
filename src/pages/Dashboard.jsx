@@ -17,6 +17,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import HowToShare from "../components/HowToShare";
 import ShareStyles from "../components/ShareStyles";
 import ShareResponse from "../components/ShareResponse";
+import { HashLoader } from "react-spinners";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -33,6 +34,7 @@ const Dashboard = () => {
   const [selectedPopup, setSelectedPopup] = useState();
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [selectedResponse, setSelectedResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (location.state === null) {
@@ -57,12 +59,19 @@ const Dashboard = () => {
   };
 
   const handleGetAllQuestionsByUser = () => {
+    setIsLoading(true);
     getAllQuestionsByUser({
       userId: location.state.userId,
       pin: location.state.pin,
     })
-      .then((response) => setQuestionList(response.data))
-      .catch((error) => console.log(error));
+      .then((response) => {
+        setIsLoading(false);
+        setQuestionList(response.data);
+      })
+      .catch((error) => {
+        isLoading(false);
+        console.log(error);
+      });
   };
 
   const handleQuestionClick = (question) => {
@@ -75,7 +84,9 @@ const Dashboard = () => {
         setResponseList(response.data);
         handleOpen(1);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleCopyQuestionLink = (questionId) => {
@@ -123,6 +134,7 @@ const Dashboard = () => {
             {`Remember this while logging in.`}
           </p>
         )}
+        {isLoading && <HashLoader size={35} color="#000000" />}
         {questionList && questionList.length === 0 ? (
           <b>no QnA asked</b>
         ) : (
@@ -190,12 +202,14 @@ const Dashboard = () => {
             />
           )}
           {selectedPopup === 1 && (
-            <Responses
-              setSelectedResponse={setSelectedResponse}
-              setSelectedPopup={setSelectedPopup}
-              responseList={responseList}
-              question={selectedQuestion}
-            />
+            <div>
+              <Responses
+                setSelectedResponse={setSelectedResponse}
+                setSelectedPopup={setSelectedPopup}
+                responseList={responseList}
+                question={selectedQuestion}
+              />
+            </div>
           )}
           {selectedPopup === 2 && (
             <div className="d-flex flex-column align-items-center p-5">

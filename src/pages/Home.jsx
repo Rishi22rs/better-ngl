@@ -7,11 +7,13 @@ import {
 } from "../service/api";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
+import { HashLoader } from "react-spinners";
 
 const Home = () => {
   const [username, setUsername] = useState("");
   const [loginDetails, setLoginDetails] = useState({});
   const [usernameExists, setUsernameExists] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [styles, setStyles] = useState({
     top: 100,
     fontSize: 50,
@@ -35,30 +37,43 @@ const Home = () => {
   const onSubmitUserName = (event) => {
     event.preventDefault();
     if (username !== "") {
+      setIsLoading(true);
       checkUserNameExists({ username }).then((response) => {
         setUsernameExists(response.data.exists);
+        setIsLoading(false);
         !response.data.exists &&
           generatingPinForUser({ username })
-            .then((res) =>
+            .then((res) => {
+              setIsLoading(false);
               navigate("/dashboard", {
                 state: {
                   pin: res.data.pin,
                   userId: res.data.userId,
                   username: res.data.username,
                 },
-              })
-            )
-            .catch((error) => console.log(error));
+              });
+            })
+            .catch((error) => {
+              setIsLoading(false);
+              console.log(error);
+            });
       });
     }
   };
 
   const handleLogin = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     loginDetails &&
       gettingUserBasedOnPin(loginDetails)
-        .then((response) => navigate("/dashboard", { state: response.data }))
-        .catch((error) => console.log(error));
+        .then((response) => {
+          setIsLoading(false);
+          navigate("/dashboard", { state: response.data });
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.log(error);
+        });
   };
 
   const handleClick = (popupId) => {
@@ -121,8 +136,15 @@ const Home = () => {
                   )}
                 </div>
               </div>
-              <button className="btni p-3 w-50" type="submit">
-                letss goo
+              <button
+                className="btni p-3 w-50 d-flex justify-content-center align-items-center"
+                type="submit"
+              >
+                {isLoading ? (
+                  <HashLoader size={35} color="#000000" />
+                ) : (
+                  "letss goo"
+                )}
               </button>
               <button
                 onClick={() => setPopup(1)}
@@ -164,7 +186,11 @@ const Home = () => {
               </div>
 
               <button className="btni p-3 w-50" type="submit">
-                letss goo
+                {isLoading ? (
+                  <HashLoader size={35} color="#000000" />
+                ) : (
+                  "letss goo"
+                )}
               </button>
               <button
                 onClick={() => setPopup(0)}
