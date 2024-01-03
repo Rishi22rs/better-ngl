@@ -310,7 +310,7 @@ const ShareStyles = ({ userId, questionId, question }) => {
                 background: "rgb(0,0,0,0.9)",
                 position: "absolute",
                 bottom: 200,
-                fontSize: 25,
+                fontSize: 15,
               }}
             >
               powered by <b>Anonify.in</b>

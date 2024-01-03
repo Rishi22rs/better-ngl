@@ -8,12 +8,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { HashLoader } from "react-spinners";
+import icon from "../graphics/icon.png";
 
 const Home = () => {
   const [username, setUsername] = useState("");
   const [loginDetails, setLoginDetails] = useState({});
   const [usernameExists, setUsernameExists] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [wrongCredentials, setWrongCredentials] = useState(false);
   const [styles, setStyles] = useState({
     top: 100,
     fontSize: 50,
@@ -28,6 +30,7 @@ const Home = () => {
   };
 
   const handleLoginUserInput = (event) => {
+    setWrongCredentials(false);
     setLoginDetails({
       ...loginDetails,
       [event.target.name]: event.target.value,
@@ -72,6 +75,7 @@ const Home = () => {
         })
         .catch((error) => {
           setIsLoading(false);
+          setWrongCredentials(true);
           console.log(error);
         });
   };
@@ -93,6 +97,9 @@ const Home = () => {
             }}
             onClick={() => setStyles({ top: 100, fontSize: 50, topText: -10 })}
           >
+            <span>
+              <img className="icon" src={icon} height={50} />
+            </span>
             anonify
           </h1>
           <br />
@@ -192,6 +199,9 @@ const Home = () => {
                   "letss goo"
                 )}
               </button>
+              {wrongCredentials && (
+                <p className="text-danger mt-1">invalid credentials!!!</p>
+              )}
               <button
                 onClick={() => setPopup(0)}
                 className="btni mt-5 p-2 px-5"

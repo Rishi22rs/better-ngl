@@ -1,9 +1,9 @@
 import axios from "axios";
 
-// export const API = `http://localhost:6969/api/`;
-// export const APP_BASE_URL = "http://localhost:3000/";
-export const API = `https://ngl-2.cyclic.app/api/`;
-export const APP_BASE_URL = "https://ngl2.netlify.app/";
+export const API = `http://localhost:6969/api/`;
+export const APP_BASE_URL = "http://localhost:3000/";
+// export const API = `https://ngl-2.cyclic.app/api/`;
+// export const APP_BASE_URL = "https://anonify.in/";
 
 export const generatingPinForUser = (payload) => {
   return axios.post(`${API}generatingPinForUser`, payload);

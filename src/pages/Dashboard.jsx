@@ -4,9 +4,10 @@ import {
   APP_BASE_URL,
   getAllQuestionsByUser,
   getAllResponseByViewer,
+  saveViewerResponse,
 } from "../service/api";
 import Questions from "../components/Questions";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, IconButton, TextField } from "@mui/material";
 import Responses from "../components/Responses";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,6 +19,7 @@ import HowToShare from "../components/HowToShare";
 import ShareStyles from "../components/ShareStyles";
 import ShareResponse from "../components/ShareResponse";
 import { HashLoader } from "react-spinners";
+import icon from "../graphics/icon.png";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -35,6 +37,7 @@ const Dashboard = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [selectedResponse, setSelectedResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [userResponse, setUserResponse] = useState("");
 
   useEffect(() => {
     if (location.state === null) {
@@ -100,6 +103,26 @@ const Dashboard = () => {
     navigate("/");
   };
 
+  const onSubmitResponse = (event) => {
+    event.preventDefault();
+    userResponse !== "" &&
+      saveViewerResponse({
+        userId: "admin",
+        questionId: "admin",
+        response: userResponse,
+      })
+        .then((response) => {
+          setUserResponse("");
+          setSnackbarMessage("response sent...");
+          setOpen(true);
+        })
+        .catch((error) => console.log(error));
+  };
+
+  const handleUserInput = (event) => {
+    setUserResponse(event.target.value);
+  };
+
   const action = (
     <>
       <IconButton
@@ -117,7 +140,12 @@ const Dashboard = () => {
     <div>
       <div className="dashboard-container p-4">
         <div className="d-flex justify-content-between">
-          <h1>anonify</h1>
+          <h1>
+            <span>
+              <img src={icon} height={50} />
+            </span>
+            anonify
+          </h1>
           <Avatar
             sx={{ bgcolor: "rgb(0,105,218,0.7)" }}
             onClick={() => handleOpen(3)}
@@ -222,9 +250,29 @@ const Dashboard = () => {
           )}
           {selectedPopup === 3 && (
             <div className="d-flex flex-column align-items-center p-5">
+              <form className="d-flex flex-column mt-5">
+                <b>anonymous msg for me and my dev team</b>
+                <TextField
+                  id="msg"
+                  label="msg"
+                  multiline
+                  maxRows={4}
+                  required
+                  inputProps={{ maxLength: 40 }}
+                  value={userResponse}
+                  onChange={handleUserInput}
+                />
+                <button
+                  onClick={onSubmitResponse}
+                  className="btni p-2 mt-3"
+                  type="submit"
+                >
+                  send
+                </button>
+              </form>
               <button
                 style={{ background: "rgb(255,0,0,0.7)" }}
-                className="btni p-3 w-50"
+                className="btni p-3 w-50 mt-5"
                 onClick={handleLogout}
               >
                 <b>logout???</b>

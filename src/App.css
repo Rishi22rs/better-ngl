@@ -127,3 +127,8 @@ input {
   position: absolute;
   top: 20000px;
 }
+
+.icon {
+  -webkit-filter: grayscale(1) invert(1);
+  filter: grayscale(1) invert(1);
+}
