@@ -137,7 +137,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div>
+    <div className="d-flex justify-content-center">
       <div className="dashboard-container p-4">
         <div className="d-flex justify-content-between">
           <h1>

@@ -2,9 +2,8 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import Face3Icon from "@mui/icons-material/Face3";
 
-import gify from "../graphics/giphy.gif";
-import gify1 from "../graphics/giphy1.gif";
-import gify2 from "../graphics/giphy2.gif";
+import instagram from "../graphics/instagram.gif";
+import snapchat from "../graphics/snapchat.gif";
 import { useState } from "react";
 
 const HowToShare = () => {
@@ -15,11 +14,16 @@ const HowToShare = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        maxHeight: window.innerHeight - 200,
+        overflowY: "auto",
+      }}
+    >
       <h1>how to share</h1>
       <div className="w-100 d-flex justify-content-around">
         <button
-          className="btni p-3 d-flex align-items-center"
+          className="btni p-3 d-flex align-items-center w-50"
           style={
             selectedSocialMedia === 0
               ? { background: "rgb(23,161,183)" }
@@ -31,7 +35,7 @@ const HowToShare = () => {
           Instagram
         </button>
         <button
-          className="btni p-3"
+          className="btni p-3 w-50"
           style={
             selectedSocialMedia === 1
               ? { background: "rgb(23,161,183)" }
@@ -39,25 +43,13 @@ const HowToShare = () => {
           }
           onClick={() => handleClickSocialMedia(1)}
         >
-          <TwitterIcon />X (formerly Twitter)
-        </button>
-        <button
-          className="btni p-3"
-          style={
-            selectedSocialMedia === 2
-              ? { background: "rgb(23,161,183)" }
-              : { background: "rgb(23,161,183,0.5)" }
-          }
-          onClick={() => handleClickSocialMedia(2)}
-        >
           <Face3Icon />
           Snapchat
         </button>
       </div>
-      <div className="mt-2">
-        {selectedSocialMedia === 0 && <img width={"100%"} src={gify} />}
-        {selectedSocialMedia === 1 && <img width={"100%"} src={gify1} />}
-        {selectedSocialMedia === 2 && <img width={"100%"} src={gify2} />}
+      <div className="mt-2 d-flex justify-content-center">
+        {selectedSocialMedia === 0 && <img width={"80%"} src={instagram} />}
+        {selectedSocialMedia === 1 && <img width={"80%"} src={snapchat} />}
       </div>
     </div>
   );
