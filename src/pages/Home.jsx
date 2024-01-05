@@ -19,7 +19,7 @@ const Home = () => {
   const [styles, setStyles] = useState({
     top: 100,
     fontSize: 50,
-    topText: -10,
+    topText: 10,
   });
   const [popup, setPopup] = useState(0);
 
@@ -81,7 +81,7 @@ const Home = () => {
   };
 
   const handleClick = (popupId) => {
-    setStyles({ top: 10, fontSize: 25, topText: -35 });
+    setStyles({ top: 10, fontSize: 25, topText: -4 });
     setPopup(popupId);
   };
 
@@ -92,16 +92,26 @@ const Home = () => {
           <h1
             className="texti"
             style={{
-              top: `${styles.topText}%`,
+              position: "absolute",
+              top: `25px`,
               fontSize: `${styles.fontSize}px`,
             }}
-            onClick={() => setStyles({ top: 100, fontSize: 50, topText: -10 })}
+            onClick={() => setStyles({ top: 100, fontSize: 50, topText: -3 })}
           >
             <span>
               <img className="icon" src={icon} height={50} />
             </span>
             anonify
           </h1>
+          <div
+            className="p-5 mx-5"
+            style={{ background: "rgb(0,0,0,0.5)", borderRadius: 50 }}
+          >
+            We present a novel approach to anonymity, where we envision a secure
+            and enjoyable environment for expressing thoughts and opinions
+            without fear. Anonify strives to offer a protected space
+            specifically designed for teenagers to freely express themselves.
+          </div>
           <br />
           <button
             className="btni mb-2 p-3 w-50"
